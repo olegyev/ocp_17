@@ -1,0 +1,66 @@
+= Classes
+
+== Top-level type footnote:[OCP 17 / 1Z0-829, p. 7.]
+A _top-level type_ is a data structure that can be defined independently within a source file.
+
+Can be `public` or `default (package-private)` by access modifiers.
+
+Classes of access modifier `package-private` can be accessed only from within their package.
+
+You can even put two types in the same file. When you do so, *at most one (!!!)* of the top-level types in the file is allowed to be `public`.
+
+It doesn't matter, whether classes contain `main` method - they will be compiled successfully if filename is equal to public top-level class' name.
+
+.Example
+[source, java]
+public class Animal {
+    private String name;
+}
+class Animal2 {}
+
+If you do have a public type, it needs to match the filename. The declaration `public class Animal2` would not compile in a file named `Animal.java`.
+
+.Examples
+* [blue]#*GOOD*# +
+  *FILENAME:* `Animal.java` +
+  *javac Animal.java PRODUCES:* +
+  `Animal.class` +
+  `Animal2.class`
+[source, java]
+public class Animal {
+    private String name;
+}
+class Animal2 {}
+
+* [blue]#*GOOD*# +
+*FILENAME:* `Animal.java` (or any random name) +
+*javac Animal.java PRODUCES:* +
+`Animal2.class` +
+`Animal3.class`
+[source, java]
+class Animal2 {}
+class Animal3 {}
+
+* [red]#*BAD*# +
+*FILENAME:* `Animal2.java` +
+*javac Animal2.java PRODUCES:* +
+error: class Animal is public, should be declared in a file named Animal.java
+[source, java]
+public class Animal {
+    private String name;
+}
+class Animal2 {}
+
+* [red]#*BAD*# +
+*FILENAME:* `Animal2.java` +
+*javac Animal2.java PRODUCES:* +
+error: class Animal is public, should be declared in a file named Animal.java
+[source, java]
+public class Animal {
+    private String name;
+}
+public class Animal2 {}
+
+TIP: See link:../src/by/olegyev/ocp17/classes/TopLevelType.java[source code].
+
+TIP: A possible reason why public top-level class' name should be equal to filename is within `import` statement. Package-private classes can be instantiated and called only within the same package, where `import` statement is redundant for them (though possible - see source code from the tip above). However, it is possible to use `public` classes outside their packages, which required explicit `import` statement. Considering that `import` statement references class, NOT .java file (actual importing occurs on compilation, when .class is already available, that's why it is possible to import package-private classes from the file with another name; also, see compilation order with imports - first, need to compile dependencies to be imported, then - importing class), it is much easier to read those `import` statement by human - we can see the file with the same name as class in the classpath, no need to open this file to check class' name (compiler produces .class file with the class' name, NOT source code .java file's name). It was, probably, especially necessary in the 1990s, when there were no advanced IDEs.

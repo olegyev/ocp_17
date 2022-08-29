@@ -1,0 +1,14 @@
+= Methods
+
+== Method's signature footnote:[OCP 17 / 1Z0-829, p. 5.]
+Method's signature includes method's name and parameter type/s.
+
+.Example
+[source, java]
+public int numberVisitors(int month) {
+    return 10;
+}
+
+.Signature
+[source, java]
+numberVisitors(int)

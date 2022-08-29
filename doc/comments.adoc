@@ -1,0 +1,46 @@
+= Comments
+
+== Types footnote:[OCP 17 / 1Z0-829, p. 5-6.]
+```
+// one-line comment
+```
+```
+/*
+ * multiple-lines comment
+ */
+```
+```
+/**
+ * javadoc
+ */
+```
+== Edge cases footnote:[OCP 17 / 1Z0-829, p. 6-7.]
+TIP: See link:../src/by/olegyev/ocp17/comments/Comments.java[source code].
+
+The comment containing anteater is in a multiline comment. Everything between /* and */ is part of a multiline comment—even  if it includes a single-line comment within it!
+```
+/*
+ * // anteater
+ */
+```
+The comments containing cat and dog are also single-line comments. Everything from // to the  end of the line is part of the comment, even if it is another type of comment.
+```
+// // cat
+```
+```
+// /* dog */
+```
+The comment containing elephant is your basic multiline comment, even though it only takes up one line.
+```
+/* elephant */
+```
+The line with ferret is interesting in that it doesn’t compile. Everything from the first /* to  the first **/ is part of the comment, which means the compiler sees something like this:
+```
+/* */ */
+```
+We have a problem. There is an extra */. That’s not valid syntax—a fact the compiler is happy to inform you about.
+```
+/*
+ * /* ferret */
+ */
+```
