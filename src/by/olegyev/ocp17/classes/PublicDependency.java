@@ -3,7 +3,7 @@ package by.olegyev.ocp17.classes;
 /**
  * @link doc/classes.adoc
  */
-public class TopLevelType {
+public class PublicDependency {
 
 	public void greetings() {
 		System.out.println("Hello from Top-Level Public Type!");
@@ -12,11 +12,11 @@ public class TopLevelType {
 	public static void main(String[] args) {
 		System.out.println("Hello from TopLevelType main!");
 
-		TopLevelType topLevelType = new TopLevelType();
+		PublicDependency publicDependency = new PublicDependency();
 		PackagePrivate packagePrivate = new PackagePrivate();
 		PackagePrivateDuplicate packagePrivateDuplicate = new PackagePrivateDuplicate();
 
-		topLevelType.greetings();
+		publicDependency.greetings();
 		packagePrivate.greetings();
 		packagePrivateDuplicate.greetings();
 	}
@@ -32,11 +32,11 @@ class PackagePrivate {
 	public static void main(String[] args) {
 		System.out.println("Hello from PackagePrivate main!");
 
-		TopLevelType topLevelType = new TopLevelType();
+		PublicDependency publicDependency = new PublicDependency();
 		PackagePrivate packagePrivate = new PackagePrivate();
 		PackagePrivateDuplicate packagePrivateDuplicate = new PackagePrivateDuplicate();
 
-		topLevelType.greetings();
+		publicDependency.greetings();
 		packagePrivate.greetings();
 		packagePrivateDuplicate.greetings();
 	}
@@ -52,11 +52,11 @@ class PackagePrivateDuplicate {
 	public static void main(String[] args) {
 		System.out.println("Hello from PackagePrivateDuplicate main!");
 
-		TopLevelType topLevelType = new TopLevelType();
+		PublicDependency publicDependency = new PublicDependency();
 		PackagePrivate packagePrivate = new PackagePrivate();
 		PackagePrivateDuplicate packagePrivateDuplicate = new PackagePrivateDuplicate();
 
-		topLevelType.greetings();
+		publicDependency.greetings();
 		packagePrivate.greetings();
 		packagePrivateDuplicate.greetings();
 	}
