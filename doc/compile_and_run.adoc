@@ -1,0 +1,150 @@
+= Compile and run
+
+== Compile and run with the packages footnote:[OCP 17 / 1Z0-829, p. 5.]
+== Source files structure
+----
+C:\Users\oyevs\Desktop\projects
+                          |
+                          |
+                       packages
+                          |--- packagea
+                          |       |--- public ClassA.java
+                          |
+                          |--- packageb
+                                  |--- public Main.java
+                                  |--- public ClassB.java
+                                  |               |--- ClassC.java
+                                  |               |--- ClassD.java
+                                  |--- ClassE.java
+
+----
+
+== Compile `Main.java`
+Class `Main.java` includes `main()` method, which runs `greetings()` method from all other classes (the method just prints text) - `ClassA.java`, `ClassB.java`, `ClassC.java`, `ClassD.java`, `ClassE.java`.
+
+.Compiling from the source root folder - `packages`.
+```
+javac packageb/Main.java
+```
+This command compiles the `Main.java` file and all its dependencies automatically. *NO need to compile all the dependencies separately.* Though it is possible (*order of the classes is NOT important*, also, *we can call `javac` on all the classess separately* in any order):
+```
+javac packagea/ClassA.java packageb/ClassB.java packageb/ClassE.java packageb/Main.java
+```
+*NB!* Please, note that all the package-private classes from the file `ClassB.java` (i.e. `ClassC.java` and `ClassD.java`) are compiled automatically when compiling their parent file - `ClassB.java`. So, there 3 _.class_ files will be generated after `javac packageb/ClassB.java`: `ClassB.class`, `ClassC.class`, `ClassD.class`.
+
+.Compiling from another folder.
+In that case, we need to provide `-sourcepath` (or `--source-path`; also `-cp`, `-classpath`, or `--class-path` can be used) option pointing out to the *source root folder* (`C:\Users\oyevs\Desktop\projects\packages` in our case).
+
+Compiling `Main.java` from `C:\Users\oyevs\Desktop`:
+```
+javac -sourcepath ./projects/packages ./projects/packages/packageb/Main.java
+```
+
+Compiling `Main.java` from its folder `C:\Users\oyevs\Desktop\projects\packages\packageb`:
+```
+javac --source-path .. Main.java
+```
+
+*NB!* If the `-sourcepath` option is not specified, the user's `-classpath` is searched for source files as well as class files (see below).
+
+.Compiling with wildcards.
+We can use an asterisk to specify that you’d like to include all Java files in a directory:
+```
+javac packagea/*.java packageb/*.java
+```
+
+.Compile to another directory
+By default, _.class_ files are generated in the same folders as the source _.java_ files.
+
+To store them in another folder, we can use `-d` option (e.g. compiling from the source root folder):
+```
+javac -d classes packageb/Main.java
+```
+
+As a result, _.class_ files will be stored under `C:\Users\oyevs\Desktop\projects\packages\classes` folder according to their packages:
+
+`.\classes\packagea\ClassA.class`,
+`.\classes\packageb\Main.class`, etc.
+
+== Run `Main.class`
+.Bytecode compiled in the source code files' folder.
+Run from within the source root folder - `packages`:
+```
+java packageb.Main
+```
+
+Run from another folder (Main class' folder) - use `-classpath` (`-cp`, `--class-path`) option:
+```
+java -cp .. packageb.Main
+java -classpath .. packageb.Main
+java --class-path .. packageb.Main
+```
+
+*NB!* [red]#Package name should be always provided as class name's prefix# while running, because [red]#JVM identified classes by their fully-qualified class names#, which is actually used in the bytecode.
+
+.Bytecode compiled to another folder - `.\packages\classes`.
+We need to use `-classpath` (`-cp`, `--class-path`) option (Run from within the source root folder - `packages`):
+```
+java -cp classes packageb.Main
+java -classpath classes packageb.Main
+java --class-path classes packageb.Main
+```
+
+.Single-File Source-Code
+Compile and run in one command ("Hello, world!" and Test are command line program parameters/arguments)
+```
+java Main.java "Hello, world!" Test
+```
+
+== Compile and run with JAR files
+*NB!* Only compiled files can be added to the JAR.
+
+To create JAR file (`packagea.ClassA` is compiled into `.\classes\packagea`, creating JAR from within this folder:
+```
+ jar -cvf testJar.jar .
+ jar --create --verbose --file testJar.jar .
+```
+
+To create JAR file from the source root folder - `packages` (for the same compiled class) - use `-C` option to define directory containing files to be used to create the JAR:
+```
+jar -cvf testJar.jar -C classes .
+jar --create --verbose --file testJar.jar -C classes .
+```
+
+To compile `Main.java` into `.\classes` folder using JAR dependency of `packagea.ClassA`:
+
+On *Windows* (separator - `;`)
+```
+javac -cp ".;.\classes" -d classes packageb/Main.java
+```
+
+On **NIX* (separator - `:`)
+```
+javac -cp ".:.\classes" -d classes packageb/Main.java
+```
+
+To run `Main` class from within the JAR (from `C:\Users\oyevs\Desktop` folder):
+```
+java -cp ".\projects\*" packageb.Main
+```
+
+Other examples on how to provide multiple classpathes (also, for JARs):
+
+On *Windows*
+```
+java -cp
+".;C:\temp\someOtherLocation;c:\temp\myJar.jar" myPackage.MyClass
+```
+
+On **NIX*
+```
+java -cp
+".:/tmp/someOtherLocation:/tmp/myJar.jar" myPackage.MyClass
+```
+
+We can use a *wildcard (*)* to match all the JARs in a directory
+```
+java -cp
+"C:\temp\directoryWithJars\*" myPackage.MyClass
+```
+

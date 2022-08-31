@@ -1,6 +1,6 @@
 = Imports
 
-== Imports' tips and tricks footnote:[OCP 17 / 1Z0-829, p. 5.]
+== Imports' tips and tricks footnote:[OCP 17 / 1Z0-829, p. 13-16.]
 .Wildcard (.*)
 Using wildcard, we can import only underlying clasess (NOT subpackages).
 [source, java]
