@@ -1,0 +1,65 @@
+= Imports
+
+== Imports' tips and tricks footnote:[OCP 17 / 1Z0-829, p. 5.]
+.Wildcard (.*)
+Using wildcard, we can import only underlying clasess (NOT subpackages).
+[source, java]
+import java.util.*;
+
+To import classes from subpackages using wildcards, we need to use it together with the underlying subpackage.
+[source, java]
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+
+.Redundancy
+Classes from package `java.lang` are automatically imported, so there is no need to explicitly import them (though, it is possible). In the example below, lines 1 and 2 are redundant. Lines 3 and 4 are interchangeable (only one of them can be left).
+[source, java]
+1: import java.lang.System; // redundant
+2: import java.lang.*; // redundant
+3: import java.util.Random; // either this
+4: import java.util.*; // or this
+5: public class NumberPicker {
+6:      public static void main(String[] args) {
+7:          Random r = new Random();
+8:          System.out.println(r.nextInt(10));
+9:      }
+10: }
+
+Another case of redundancy involves importing a class that is in the same package as the
+class importing it. Java automatically looks in the current package for other classes (see xref:./classes.adoc#id-for-import-tip[classes doc]).
+
+.Naming conflicts
+* [red]#*BAD*# +
+[source, java]
+import java.util.Date;
+import java.sql.Date;
+public class Conflicts {
+    Date date;
+}
+
+* [red]#*BAD*# +
+[source, java]
+import java.util.*;
+import java.sql.*;
+public class Conflicts {
+    Date date;
+}
+
+* [blue]#*GOOD*# +
+If you explicitly import a class name, it takes precedence over any
+wildcards present.
+[source, java]
+import java.util.Date; // takes precedence
+import java.sql.*;
+public class Conflicts {
+    Date date;
+}
+
+* [blue]#*GOOD*# +
+Don't forget that `import` statement is just a *_syntactical sugar_*, which replaces *_fully-qualified class names_* (they are used in bytecode after compilation, actually, instead of all possible import statements). We can interchange it with `import` statements either (for line 1 use `import`, for line 2 - fully-qualified class name, for example, or vice versa).
+[source, java]
+1: public class Conflicts {
+2:     java.util.Date date;
+3:     java.sql.Date sqlDate;
+4: }
