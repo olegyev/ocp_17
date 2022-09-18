@@ -85,4 +85,5 @@ Another default types of the literals:
 [source, java]
 System.out.println(((Object) 127L).getClass().getName()); // -> java.lang.Long
 System.out.println(((Object) 127.1).getClass().getName()); // -> java.lang.Double
+System.out.println(((Object) 127.1f).getClass().getName()); // -> java.lang.Float
 System.out.println(((Object) 127f).getClass().getName()); // -> java.lang.Float
