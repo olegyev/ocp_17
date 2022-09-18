@@ -1,6 +1,6 @@
 = Compile and run
 
-== Compile and run with the packages footnote:[OCP 17 / 1Z0-829, p. 5.]
+== Compile and run with the packages footnote:[OCP 17 / 1Z0-829, p. 16-21.]
 == Source files structure
 ----
 C:\Users\oyevs\Desktop\projects
@@ -146,5 +146,10 @@ We can use a *wildcard (*)* to match all the JARs in a directory
 ```
 java -cp
 "C:\temp\directoryWithJars\*" myPackage.MyClass
+```
+
+Run jar file with arguments
+```
+java -jar fileName.jar "arg 1" arg2
 ```
 
