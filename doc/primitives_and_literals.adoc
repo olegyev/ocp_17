@@ -1,0 +1,88 @@
+= Primitive Types and Literals
+
+== Primitive Types footnote:[OCP 17 / 1Z0-829, p. 27-28.]
+.Primitive types
+
+|===
+|Keyword |Type |Min value |Max value |Default value |Example
+
+|boolean
+|`true` or `false`
+|n/a
+|n/a
+|false
+|true
+
+|byte
+|8-bit integral value
+|-128
+|127
+|0
+|123
+
+|short
+|16-bit integral value
+|-32,768
+|32,767
+|0
+|12,345
+
+|int
+|32-bit integral value
+|-2,147,483,648
+|2,147,483,647
+|0
+|1,234,567,890
+
+|long
+|64-bit integral value
+|-2^63
+|2^63-1
+|0L (but prints "0")
+|123L
+
+|float
+|32-bit floating-point value
+|n/a
+|n/a
+|0.0f (but prints "0.0"). NB! Without an f or F, Java interprets a decimal value as a double
+|123.45f
+
+|double
+|64-bit floating-point value
+|n/a
+|n/a
+|0.0 (can be assigned also as 0.0d/0.0D, but prints "0.0")
+|123.45 or 123.45d or 123.45D
+
+|char
+|16-bit Unicode value
+|0
+|65,535
+|\u0000
+|'a'
+|===
+
+.Widening Casting of the primitive types (automatically)
+Always go in the direction from smaller to higher: +
+*byte -> short -> char -> int -> long -> float -> double*
+[source, java]
+byte a = 127;
+short b = 32_767;
+char c1 = 'a';
+char c2 = 97; // -> 'a'
+short c3 = 'a'; // -> 97
+int d = 2_147_483_647;
+long e = 1L;
+float f = 1.1f; // 1f or 1 (int by default) are also legal -> will be turned into 1.0f, but prints "1.0"
+double g = 1.1; // 1 (int by default) is also legal -> will be turned into 1.0 (or 1.0d), but prints "1.0"
+
+However, by default, all the integral literals are considered as int/Integer - it is being automatically cast to another type (byte, short, char, long, float, double) if fits:
+[source, java]
+System.out.println(((Object) 127).getClass().getName()); // -> java.lang.Integer
+
+Another default types of the literals:
+[source, java]
+System.out.println(((Object) 127L).getClass().getName()); // -> java.lang.Long
+System.out.println(((Object) 127.1).getClass().getName()); // -> java.lang.Double
+System.out.println(((Object) 127f).getClass().getName()); // -> java.lang.Float
