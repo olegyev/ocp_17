@@ -77,9 +77,22 @@ long e = 1L;
 float f = 1.1f; // 1f or 1 (int by default) are also legal -> will be turned into 1.0f, but prints "1.0"
 double g = 1.1; // 1 (int by default) is also legal -> will be turned into 1.0 (or 1.0d), but prints "1.0"
 
-However, by default, all the integral literals are considered as int/Integer - it is being automatically cast to another type (byte, short, char, long, float, double) if fits:
+== Literals footnote:[OCP 17 / 1Z0-829, p. 28-29.]
+.Numeric primitives == literals
+By default, all the integral literals are considered as `int` - it is being automatically cast to another type (byte, short, char, long, float, double) if fits:
 [source, java]
 System.out.println(((Object) 127).getClass().getName()); // -> java.lang.Integer
+
+In the following example, the number listed is bigger than what fits in
+an `int`.
+[source, java]
+long max = 3123456789; // DOES NOT COMPILE
+
+Java complains the number is out of range. And it is - for
+an `int`. However, we don’t
+have an `int`. The solution is to add the character *L* to the number:
+[source, java]
+long max = 3123456789L; // Now Java knows it is a long
 
 Another default types of the literals:
 [source, java]
@@ -89,3 +102,37 @@ System.out.println(((Object) 127.1d).getClass().getName()); // -> java.lang.Doub
 System.out.println(((Object) 127d).getClass().getName()); // -> java.lang.Double
 System.out.println(((Object) 127.1f).getClass().getName()); // -> java.lang.Float
 System.out.println(((Object) 127f).getClass().getName()); // -> java.lang.Float
+
+.Change base
+
+*Octal* prefix (digits 0-7) - `0`
+[source, java]
+int octal = 017; // prints 15
+
+*Hexadecimal* prefix (digits 0-9, letters A-F/a-f - case insensitive) - `0x` or `0X`
+[source, java]
+int hex1 = 0xFF; // prints 255
+int hex2 = 0xff; // prints 255
+int hex3 = 0XFf; // prints 255
+
+*Binary* prefix (digits 0-1) - `0b` or `0B`
+[source, java]
+int hex1 = 0b10; // prints 2
+int hex2 = 0B10; // prints 2
+
+*NB!* Casting rules the same as for decimal digits.
+
+For example, hexadecimal is too big for an int - need to add *L*.
+[source, java]
+long hex1 = 0xFFFFFFFFFFL; // otherwise - 'Integer number too large'
+
+.Underscore character
+*NB!* Can be used *ONLY BETWEEN* two digits, i.e. *NOT AS FIRST/LAST* character and *NOT RIGHT BEFORE/AFTER* decimal point.
+[source, java]
+int million1 = 1000000;
+int million2 = 1_000_000;
+double notAtStart = _1000.00; // DOES NOT COMPILE
+double notAtEnd = 1000.00_; // DOES NOT COMPILE
+double notByDecimal = 1000_.00; // DOES NOT COMPILE
+double annoyingButLegal = 1_00_0.0_0; // Ugly, but compiles
+double reallyUgly = 1__________2; // Also compiles
